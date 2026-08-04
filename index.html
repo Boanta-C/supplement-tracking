@@ -1,0 +1,1663 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#15191c" />
+  <title>Plan zilnic suplimente</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #141719;
+      --bg-deep: #0e1113;
+      --paper: #ddd3bd;
+      --paper-2: #d1c4a8;
+      --ink: #192128;
+      --ink-soft: #59605f;
+      --line: rgba(25, 33, 40, 0.18);
+      --cream: #efe5cf;
+      --orange: #d66f32;
+      --orange-soft: #f0a469;
+      --teal: #2e716d;
+      --teal-light: #83aaa4;
+      --red: #9d473d;
+      --green: #607854;
+      --muted: #8b8b85;
+      --focus: #f0b54b;
+      --radius: 13px;
+      --shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+      font-family: Verdana, "DejaVu Sans", ui-sans-serif, system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { min-width: 320px; background: var(--bg-deep); }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 18% 12%, rgba(214, 111, 50, 0.12), transparent 32rem),
+        radial-gradient(circle at 84% 78%, rgba(46, 113, 109, 0.10), transparent 34rem),
+        linear-gradient(145deg, #1c2123 0%, var(--bg) 46%, #101315 100%);
+    }
+
+    button { font: inherit; }
+
+    .shell {
+      width: min(1800px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 34px 0 44px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .brandline {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "PT Sans Narrow", "Noto Sans SemiCondensed", ui-sans-serif, system-ui, sans-serif;
+      font-size: clamp(2.4rem, 5vw, 5.1rem);
+      line-height: 0.88;
+      letter-spacing: -0.045em;
+      text-transform: uppercase;
+      color: var(--cream);
+      text-wrap: balance;
+    }
+
+    .date {
+      flex: 0 0 auto;
+      color: var(--orange-soft);
+      font-size: 0.78rem;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .progress-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .progress-copy {
+      text-align: right;
+      min-width: 116px;
+    }
+
+    .progress-copy strong {
+      display: block;
+      font-variant-numeric: tabular-nums;
+      font-size: 1.2rem;
+      line-height: 1;
+      color: var(--cream);
+    }
+
+    .progress-copy span {
+      display: block;
+      margin-top: 5px;
+      color: #a9ada9;
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .reset-button {
+      min-height: 44px;
+      padding: 0 15px;
+      border: 1px solid rgba(239, 229, 207, 0.22);
+      border-radius: 999px;
+      color: var(--cream);
+      background: rgba(255, 255, 255, 0.045);
+      cursor: pointer;
+      transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+
+    .reset-button:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(239, 229, 207, 0.4); }
+    .reset-button:active { transform: translateY(1px); }
+    .reset-button:focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+
+    .page-grid {
+      display: grid;
+      grid-template-columns: minmax(720px, 2.1fr) minmax(300px, 0.8fr) minmax(300px, 0.8fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .ledger,
+    .water-board,
+    .notes-board {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .ledger {
+      color: var(--ink);
+      background:
+        linear-gradient(90deg, rgba(157, 71, 61, 0.11) 0 1px, transparent 1px) 94px 0 / 1px 100% no-repeat,
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,0.32), transparent 23rem),
+        linear-gradient(135deg, var(--paper) 0%, #d8cdb6 54%, #cfc1a4 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .ledger::before,
+    .water-board::before,
+    .notes-board::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.22;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(0,0,0,0.13) 0 0.7px, transparent 0.8px),
+        radial-gradient(circle at 80% 65%, rgba(255,255,255,0.22) 0 0.7px, transparent 0.8px);
+      background-size: 15px 17px, 21px 19px;
+      mix-blend-mode: multiply;
+    }
+
+    .ledger-head {
+      position: relative;
+      display: grid;
+      grid-template-columns: 94px minmax(0, 1fr);
+      border-bottom: 2px solid rgba(25, 33, 40, 0.55);
+    }
+
+    .ledger-index,
+    .ledger-title {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+    }
+
+    .ledger-index {
+      justify-content: center;
+      background: var(--ink);
+      color: var(--cream);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .ledger-title {
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 22px;
+    }
+
+    .ledger-title h2,
+    .board-heading h2 {
+      margin: 0;
+      font-family: "PT Sans Narrow", "Noto Sans SemiCondensed", ui-sans-serif, system-ui, sans-serif;
+      font-size: 1.55rem;
+      letter-spacing: -0.025em;
+      text-transform: uppercase;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 9px;
+      border-radius: 999px;
+      font-size: 0.69rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .tag-temporary { color: #fff3e9; background: var(--red); }
+    .tag-gym { color: #ecfffb; background: var(--teal); }
+    .tag-optional { color: var(--ink); background: #e0a55d; }
+
+    .time-block {
+      position: relative;
+      display: grid;
+      grid-template-columns: 94px minmax(0, 1fr);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .time-block:last-child { border-bottom: 0; }
+
+    .time-cell {
+      position: relative;
+      z-index: 1;
+      padding: 21px 12px;
+      text-align: center;
+      font-family: "PT Sans Narrow", "Noto Sans SemiCondensed", ui-sans-serif, system-ui, sans-serif;
+      font-size: 1.22rem;
+      font-weight: 950;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+    }
+
+    .time-cell small {
+      display: block;
+      margin-top: 5px;
+      font-family: Verdana, "DejaVu Sans", ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.61rem;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+    }
+
+    .block-body {
+      position: relative;
+      z-index: 1;
+      padding: 15px 18px 16px 22px;
+    }
+
+    .block-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 7px;
+    }
+
+    .block-label h3 {
+      margin: 0;
+      font-size: 0.88rem;
+      font-weight: 950;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .task-list { display: grid; gap: 2px; }
+
+    .task {
+      position: relative;
+      width: 100%;
+      min-height: 45px;
+      display: grid;
+      grid-template-columns: 30px minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      padding: 5px 8px 5px 4px;
+      border: 0;
+      border-radius: 8px;
+      color: var(--ink);
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+      transition: background 170ms ease, color 170ms ease, opacity 170ms ease, filter 170ms ease;
+    }
+
+    .task:hover { background: rgba(255, 255, 255, 0.25); }
+    .task:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+    .task:active { background: rgba(25, 33, 40, 0.08); }
+
+    .check {
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      border: 2px solid currentColor;
+      border-radius: 4px;
+      color: var(--ink);
+      transition: background 170ms ease, color 170ms ease, transform 170ms ease, border-radius 170ms ease;
+    }
+
+    .task.task-temporary .check,
+    .task.task-optional .check {
+      border-radius: 4px;
+    }
+
+    .task.task-temporary .check {
+      color: var(--red);
+      background: rgba(157, 71, 61, 0.09);
+    }
+
+    .task.task-optional .check {
+      color: #b66524;
+      background: rgba(224, 165, 93, 0.15);
+    }
+
+    .task.task-temporary:hover { background: rgba(157, 71, 61, 0.08); }
+    .task.task-optional:hover { background: rgba(224, 165, 93, 0.12); }
+
+    .check svg {
+      width: 14px;
+      height: 14px;
+      opacity: 0;
+      transform: scale(0.55) rotate(-8deg);
+      transition: opacity 140ms ease, transform 190ms cubic-bezier(.16,1,.3,1);
+    }
+
+    .task-main {
+      min-width: 0;
+      font-size: 0.98rem;
+      font-weight: 780;
+      line-height: 1.24;
+    }
+
+    .task-main small {
+      display: block;
+      margin-top: 3px;
+      color: var(--ink-soft);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .dose {
+      padding-left: 12px;
+      color: var(--ink-soft);
+      font-size: 0.84rem;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .task.is-done {
+      color: #6f716d;
+      opacity: 0.54;
+      filter: grayscale(0.85);
+    }
+
+    .task.is-done .task-main { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+    .task.is-done .check,
+    .task.task-temporary.is-done .check,
+    .task.task-optional.is-done .check {
+      color: var(--paper);
+      background: var(--ink);
+      transform: rotate(-2deg);
+    }
+    .task.is-done .check svg { opacity: 1; transform: scale(1) rotate(0); }
+
+    .task.just-done::after {
+      content: "OK";
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      color: var(--red);
+      border: 2px solid currentColor;
+      padding: 2px 5px 1px;
+      font-family: "PT Sans Narrow", "Noto Sans SemiCondensed", ui-sans-serif, system-ui, sans-serif;
+      font-size: 0.68rem;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      transform: translateY(-50%) rotate(-6deg) scale(0.7);
+      opacity: 0;
+      animation: stamp 300ms ease-out forwards;
+    }
+
+    .instruction {
+      margin: 7px 0 0 40px;
+      color: var(--ink-soft);
+      font-size: 0.73rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .gym-block {
+      background: linear-gradient(90deg, rgba(46, 113, 109, 0.16), rgba(46, 113, 109, 0.035));
+    }
+
+    .gym-block .time-cell {
+      color: #f3eee1;
+      background: var(--teal);
+    }
+
+    .gym-block .time-cell small { color: rgba(255,255,255,0.74); }
+
+    .side-rail { display: contents; }
+
+    .water-board { grid-column: 2; }
+    .notes-board { grid-column: 3; }
+
+    .water-board {
+      color: var(--cream);
+      background:
+        radial-gradient(circle at 90% 5%, rgba(131,170,164,0.18), transparent 18rem),
+        linear-gradient(150deg, #17433f 0%, #163330 52%, #102725 100%);
+      border: 1px solid rgba(131, 170, 164, 0.2);
+    }
+
+    .notes-board {
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 4% 8%, rgba(255,255,255,0.35), transparent 16rem),
+        linear-gradient(145deg, #cdbb98 0%, #bda883 100%);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .board-heading {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 19px 20px 15px;
+      border-bottom: 1px solid rgba(255,255,255,0.14);
+    }
+
+    .notes-board .board-heading { border-bottom-color: rgba(25, 33, 40, 0.16); }
+
+    .target {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .target strong {
+      display: block;
+      font-family: "PT Sans Narrow", "Noto Sans SemiCondensed", ui-sans-serif, system-ui, sans-serif;
+      font-size: 1.8rem;
+      line-height: 0.95;
+    }
+
+    .target span {
+      display: block;
+      margin-top: 4px;
+      color: rgba(239, 229, 207, 0.68);
+      font-size: 0.66rem;
+      font-weight: 850;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .water-meter {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 5px;
+      padding: 15px 20px 12px;
+    }
+
+    .water-segment {
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(239,229,207,0.16);
+      transition: background 180ms ease, transform 180ms ease;
+    }
+
+    .water-segment.filled { background: var(--orange-soft); transform: translateY(-1px); }
+
+    .water-table {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      border-collapse: collapse;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .water-table th {
+      padding: 7px 20px 9px;
+      color: rgba(239,229,207,0.58);
+      font-size: 0.67rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    .water-table th:last-child { text-align: right; }
+
+    .water-table td {
+      padding: 0;
+      border-top: 1px solid rgba(239,229,207,0.1);
+    }
+
+    .water-task {
+      width: 100%;
+      min-height: 51px;
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      gap: 9px;
+      align-items: center;
+      padding: 6px 20px;
+      border: 0;
+      color: var(--cream);
+      background: transparent;
+      cursor: pointer;
+      text-align: left;
+      transition: background 170ms ease, opacity 170ms ease, color 170ms ease;
+    }
+
+    .water-task:hover { background: rgba(255,255,255,0.06); }
+    .water-task:focus-visible { outline: 3px solid var(--focus); outline-offset: -4px; }
+    .water-task .check { color: var(--teal-light); border-color: currentColor; }
+    .water-task .water-time { font-weight: 900; font-size: 0.96rem; }
+    .water-task .water-amount { color: rgba(239,229,207,0.72); font-size: 0.78rem; font-weight: 800; }
+    .water-task.is-done { opacity: 0.42; color: #a8b1ad; }
+    .water-task.is-done .water-time { text-decoration: line-through; }
+    .water-task.is-done .check { color: var(--teal); background: var(--cream); }
+    .water-task.is-done .check svg { opacity: 1; transform: scale(1); color: var(--teal); }
+
+    .water-complete {
+      position: relative;
+      z-index: 1;
+      margin: 12px 20px 20px;
+      padding: 12px 13px;
+      border: 1px solid rgba(240, 164, 105, 0.42);
+      border-radius: 9px;
+      color: var(--cream);
+      background: rgba(214, 111, 50, 0.13);
+      font-size: 0.78rem;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .notes-list {
+      position: relative;
+      z-index: 1;
+      list-style: none;
+      margin: 0;
+      padding: 4px 20px 17px;
+    }
+
+    .notes-list li {
+      display: grid;
+      grid-template-columns: 19px minmax(0, 1fr);
+      gap: 10px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(25, 33, 40, 0.13);
+      font-size: 0.81rem;
+      font-weight: 760;
+      line-height: 1.42;
+    }
+
+    .notes-list li:last-child { border-bottom: 0; }
+
+    .note-mark {
+      width: 17px;
+      height: 17px;
+      display: grid;
+      place-items: center;
+      margin-top: 1px;
+      border: 1.5px solid currentColor;
+      border-radius: 50%;
+      color: var(--red);
+      font-size: 0.63rem;
+      font-weight: 950;
+    }
+
+    .notes-list strong { color: var(--ink); }
+
+    .footer-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: 15px;
+      color: rgba(239,229,207,0.58);
+      font-size: 0.72rem;
+    }
+
+    .footer-line span:last-child { text-align: right; }
+
+
+
+    .top-actions { display: flex; align-items: center; gap: 10px; }
+    .edit-button { border-radius: 10px; }
+
+    .editor-shell {
+      width: min(1260px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 34px 0 44px;
+    }
+
+    .editor-topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: end;
+      margin-bottom: 18px;
+    }
+
+    .editor-subtitle {
+      margin: 10px 0 0;
+      color: rgba(239,229,207,.64);
+      font-size: .8rem;
+      font-weight: 700;
+    }
+
+    .editor-actions { display: flex; gap: 10px; align-items: center; }
+    .primary-button { color: var(--ink); background: var(--orange-soft); border-color: var(--orange-soft); font-weight: 900; }
+    .primary-button:hover { color: var(--ink); background: #f5b77f; border-color: #f5b77f; }
+    .danger-button { color: #ffd8d2; border-color: rgba(185,85,73,.58); }
+    .danger-button:hover { background: rgba(185,85,73,.15); border-color: var(--danger, #b95549); }
+
+    .editor-board {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(255,255,255,.32), transparent 22rem),
+        linear-gradient(135deg, var(--paper) 0%, #d5c8ae 64%, #c2b18f 100%);
+      box-shadow: var(--shadow);
+    }
+
+    .editor-tabs {
+      display: flex;
+      gap: 2px;
+      padding: 10px;
+      background: var(--ink);
+      overflow-x: auto;
+    }
+
+    .editor-tab {
+      min-height: 44px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 8px;
+      color: rgba(239,229,207,.68);
+      background: transparent;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .editor-tab:hover { color: var(--cream); background: rgba(255,255,255,.06); }
+    .editor-tab[aria-selected="true"] { color: var(--ink); background: var(--paper); }
+    .editor-tab:focus-visible { outline: 3px solid var(--focus); outline-offset: -2px; }
+
+    .editor-panel { padding: 22px; }
+    .editor-panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+    .editor-panel-head h2 { margin: 0; font-family: "PT Sans Narrow", "Noto Sans SemiCondensed", ui-sans-serif, system-ui, sans-serif; font-size: 1.55rem; text-transform: uppercase; }
+    .editor-panel-head p { max-width: 66ch; margin: 6px 0 0; color: var(--ink-soft); font-size: .78rem; font-weight: 700; line-height: 1.45; }
+
+    .editor-stack { display: grid; gap: 14px; }
+    .plan-edit-block { border: 1px solid rgba(25,33,40,.23); border-radius: 12px; background: rgba(255,255,255,.18); }
+
+
+    .plan-edit-summary {
+      min-height: 54px;
+      display: grid;
+      grid-template-columns: 88px minmax(0,1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 14px;
+      color: var(--ink);
+      cursor: pointer;
+      list-style: none;
+      font-size: .82rem;
+    }
+    .plan-edit-summary::-webkit-details-marker { display: none; }
+    .plan-edit-summary::after { content: "+"; grid-column: 3; grid-row: 1; font-size: 1.15rem; font-weight: 950; }
+    .plan-edit-block[open] > .plan-edit-summary::after { content: "−"; }
+    .plan-edit-summary:hover { background: rgba(255,255,255,.22); }
+    .plan-edit-summary:focus-visible { outline: 3px solid var(--focus); outline-offset: -3px; }
+    .plan-edit-time { font-variant-numeric: tabular-nums; font-weight: 950; }
+    .plan-edit-summary strong { min-width: 0; overflow-wrap: anywhere; }
+    .plan-edit-count { margin-inline-end: 28px; color: var(--ink-soft); font-size: .7rem; font-weight: 850; }
+    .plan-edit-block[open] > .plan-edit-summary { border-bottom: 1px solid rgba(25,33,40,.15); }
+
+    .plan-edit-block.is-gym { border-color: rgba(46,113,109,.48); background: rgba(46,113,109,.10); }
+    .plan-edit-head { display: grid; grid-template-columns: .55fr .7fr 1.4fr .65fr auto; gap: 10px; align-items: end; padding: 14px; border-bottom: 1px solid rgba(25,33,40,.15); }
+    .plan-edit-items { padding: 4px 14px 12px; }
+    .plan-edit-item { display: grid; grid-template-columns: 1.1fr .65fr 1.45fr .65fr auto; gap: 10px; align-items: end; padding: 12px 0; border-bottom: 1px solid rgba(25,33,40,.11); }
+    .plan-edit-item:last-of-type { border-bottom: 0; }
+
+    .field { min-width: 0; display: grid; gap: 6px; }
+    .field > span { color: var(--ink-soft); font-size: .67rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+    .editor-input, .editor-select, .editor-textarea {
+      width: 100%; min-height: 44px; padding: 10px 11px;
+      border: 1px solid rgba(25,33,40,.28); border-radius: 8px;
+      color: var(--ink); background: rgba(250,246,235,.76);
+      font-size: .9rem; line-height: 1.35; outline: none;
+      transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+    }
+    .editor-textarea { min-height: 76px; resize: vertical; }
+    .editor-input:focus, .editor-select:focus, .editor-textarea:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(46,113,109,.18); background: #fbf7ed; }
+    [aria-invalid="true"] { border-color: #b95549 !important; box-shadow: 0 0 0 3px rgba(185,85,73,.16) !important; }
+
+    .row-actions { display: flex; gap: 6px; align-items: center; }
+    .mini-button {
+      width: 38px; height: 38px; display: grid; place-items: center;
+      border: 1px solid rgba(25,33,40,.24); border-radius: 8px;
+      color: var(--ink); background: rgba(255,255,255,.28);
+      font-weight: 950; cursor: pointer;
+    }
+    .mini-button:hover { background: rgba(255,255,255,.56); }
+    .mini-button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+    .mini-button:disabled { opacity: .34; cursor: not-allowed; }
+    .mini-button.remove { color: #762f29; }
+
+    .add-button {
+      min-height: 44px; display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 0 13px; border: 1px dashed rgba(25,33,40,.36);
+      border-radius: 8px; color: var(--ink); background: rgba(255,255,255,.14);
+      font-weight: 850; cursor: pointer;
+    }
+    .add-button:hover { background: rgba(255,255,255,.34); }
+    .add-button:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+    .simple-editor-list { display: grid; gap: 2px; }
+    .simple-edit-row { display: grid; grid-template-columns: .55fr 1.4fr auto; gap: 10px; align-items: end; padding: 12px; border-bottom: 1px solid rgba(25,33,40,.14); }
+    .note-edit-row { grid-template-columns: 86px .65fr 1.5fr auto; }
+    .target-editor { display: grid; grid-template-columns: minmax(180px,260px) 1fr; gap: 16px; align-items: end; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid rgba(25,33,40,.16); }
+    .target-editor p { margin: 0 0 4px; color: var(--ink-soft); font-size: .78rem; font-weight: 700; line-height: 1.45; }
+
+    .editor-error { margin-bottom: 14px; padding: 12px 14px; border: 1px solid rgba(185,85,73,.58); border-radius: 9px; color: #ffd8d2; background: rgba(185,85,73,.15); font-size: .82rem; font-weight: 780; line-height: 1.4; }
+    .editor-footer { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 16px; }
+    .editor-footer-note { color: rgba(239,229,207,.60); font-size: .74rem; line-height: 1.4; }
+    .editor-empty { padding: 28px 18px; color: var(--ink-soft); text-align: center; font-size: .84rem; font-weight: 750; }
+
+    @media (max-width: 1120px) {
+      .plan-edit-head { grid-template-columns: 1fr 1fr; }
+      .plan-edit-head .field:nth-child(3), .plan-edit-head .row-actions { grid-column: 1 / -1; }
+      .plan-edit-head .row-actions { justify-content: flex-end; }
+      .plan-edit-item { grid-template-columns: 1fr 1fr; }
+      .plan-edit-item .field:nth-child(3), .plan-edit-item .row-actions { grid-column: 1 / -1; }
+      .plan-edit-item .row-actions { justify-content: flex-end; }
+      .note-edit-row { grid-template-columns: 86px 1fr; }
+      .note-edit-row .field:nth-child(3), .note-edit-row .row-actions { grid-column: 1 / -1; }
+      .note-edit-row .row-actions { justify-content: flex-end; }
+    }
+
+    @media (max-width: 720px) {
+      .top-actions { width: 100%; }
+      .top-actions .reset-button { flex: 1; }
+      .editor-shell { width: min(100% - 20px, 680px); padding-top: 22px; }
+      .editor-topbar { grid-template-columns: 1fr; align-items: start; }
+      .editor-actions { width: 100%; }
+      .editor-actions .reset-button { flex: 1; }
+      .editor-panel { padding: 14px; }
+      .editor-panel-head { align-items: flex-start; }
+      .plan-edit-head, .plan-edit-item, .simple-edit-row, .note-edit-row, .target-editor { grid-template-columns: 1fr; }
+      .plan-edit-head .field:nth-child(3), .plan-edit-head .row-actions,
+      .plan-edit-item .field:nth-child(3), .plan-edit-item .row-actions,
+      .note-edit-row .field:nth-child(3), .note-edit-row .row-actions { grid-column: auto; }
+      .plan-edit-head .row-actions, .plan-edit-item .row-actions, .note-edit-row .row-actions { justify-content: flex-start; }
+      .editor-footer { position: sticky; bottom: 8px; padding: 10px; border-radius: 10px; background: rgba(20,23,25,.95); box-shadow: 0 8px 24px rgba(0,0,0,.28); }
+      .editor-footer-note { display: none; }
+      .editor-footer .editor-actions { width: 100%; }
+    }
+
+    @media (max-width: 430px) {
+      .editor-panel-head { display: block; }
+      .editor-panel-head .add-button { width: 100%; margin-top: 12px; }
+      .editor-tab { padding-inline: 13px; }
+      .editor-input, .editor-select, .editor-textarea { font-size: 16px; }
+      .plan-edit-summary { grid-template-columns: 68px minmax(0,1fr) auto; padding-inline: 10px; }
+      .plan-edit-count { display: none; }
+    }
+
+    @keyframes stamp {
+      0% { opacity: 0; transform: translateY(-50%) rotate(-6deg) scale(0.7); filter: blur(2px); }
+      60% { opacity: 0.9; transform: translateY(-50%) rotate(-6deg) scale(1.08); filter: blur(0); }
+      100% { opacity: 0; transform: translateY(-50%) rotate(-6deg) scale(1); }
+    }
+
+    @media (max-width: 1250px) {
+      .page-grid { grid-template-columns: minmax(0, 1fr); }
+      .side-rail {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+        gap: 18px;
+      }
+      .water-board,
+      .notes-board { grid-column: auto; }
+      .notes-board { min-height: 100%; }
+    }
+
+    @media (max-width: 720px) {
+      .shell { width: min(100% - 20px, 680px); padding-top: 22px; }
+      .topbar { grid-template-columns: 1fr; align-items: start; }
+      .brandline { display: block; }
+      .date { display: block; margin-top: 11px; }
+      .progress-cluster { justify-content: space-between; }
+      .progress-copy { text-align: left; }
+      .side-rail { grid-template-columns: 1fr; }
+      .ledger-head, .time-block { grid-template-columns: 72px minmax(0, 1fr); }
+      .ledger { background-position: 72px 0, 0 0, 0 0; }
+      .ledger-index, .ledger-title { min-height: 66px; }
+      .ledger-title { padding: 13px 14px; }
+      .ledger-title h2 { font-size: 1.25rem; }
+      .legend { display: none; }
+      .time-cell { padding: 18px 7px; font-size: 1rem; }
+      .block-body { padding: 13px 10px 14px 13px; }
+      .task { grid-template-columns: 28px minmax(0, 1fr); padding-right: 5px; }
+      .dose { grid-column: 2; padding: 0 0 5px; font-size: 0.76rem; }
+      .instruction { margin-left: 38px; }
+      .footer-line { display: block; }
+      .footer-line span { display: block; }
+      .footer-line span:last-child { margin-top: 4px; text-align: left; }
+    }
+
+    @media (max-width: 430px) {
+      h1 { font-size: 2.55rem; }
+      .reset-button { padding: 0 12px; }
+      .progress-copy strong { font-size: 1.05rem; }
+      .board-heading { padding-inline: 16px; }
+      .water-meter { padding-inline: 16px; }
+      .water-table th, .water-task { padding-inline: 16px; }
+      .notes-list { padding-inline: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+  
+    /* Checkbox aligned with the first/title row */
+    .task .check,
+    .water-task .check {
+      align-self: start;
+      margin-top: 2px;
+    }
+
+  </style>
+</head>
+<body>
+  <main class="shell" id="trackerView">
+    <header class="topbar">
+      <div class="brandline">
+        <h1>Plan zilnic</h1>
+        <time class="date" id="todayLabel"></time>
+      </div>
+
+      <div class="progress-cluster" aria-live="polite">
+        <div class="progress-copy">
+          <strong id="overallProgress">0 bifate</strong>
+          <span>astăzi</span>
+        </div>
+        <div class="top-actions">
+          <button class="reset-button edit-button" type="button" id="editPlan">Editează planul</button>
+          <button class="reset-button" type="button" id="resetDay">Resetează ziua</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-grid">
+      <section class="ledger" aria-labelledby="supplementsTitle">
+        <div class="ledger-head">
+          <div class="ledger-index">orar</div>
+          <div class="ledger-title">
+            <h2 id="supplementsTitle">Suplimente</h2>
+            <div class="legend" aria-label="Legendă">
+              <span class="tag tag-temporary">temporar</span>
+              <span class="tag tag-gym">sală</span>
+              <span class="tag tag-optional">la nevoie</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="scheduleRoot">
+        <section class="time-block">
+          <div class="time-cell">09:00<small>mic dejun</small></div>
+          <div class="block-body">
+            <div class="block-label"><h3>După micul dejun</h3></div>
+            <div class="task-list">
+              <button class="task" type="button" data-id="multi" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Dr. Max Multivitamin Energy<small>Până termini cutia actuală.</small></span>
+                <span class="dose">1 comprimat</span>
+              </button>
+
+              <button class="task" type="button" data-id="d3" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Vitamina D3 <span class="tag tag-temporary">temporar</span><small>Cu mâncare; repetă 25-OH D și calcemia după perioada stabilită.</small></span>
+                <span class="dose">5.000 IU</span>
+              </button>
+
+              <button class="task" type="button" data-id="k2" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Vitamina K2<small>Odată cu D3.</small></span>
+                <span class="dose">100 µg</span>
+              </button>
+
+              <button class="task" type="button" data-id="mag-am" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Magneziu bisglicinat</span>
+                <span class="dose">1 capsulă</span>
+              </button>
+
+              <button class="task" type="button" data-id="creatine" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Creatină monohidrat<small>Zilnic, inclusiv în zilele fără sală.</small></span>
+                <span class="dose">5 g</span>
+              </button>
+
+              <button class="task" type="button" data-id="collagen-rest" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Colagen hidrolizat<small>Doar în zilele fără sală.</small></span>
+                <span class="dose">10 g</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="time-block">
+          <div class="time-cell">11:30<small>între mese</small></div>
+          <div class="block-body">
+            <div class="task-list">
+              <button class="task" type="button" data-id="psyllium-am" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Psyllium<small>Separat de restul suplimentelor.</small></span>
+                <span class="dose">5 g + 350–500 ml apă</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="time-block">
+          <div class="time-cell">14:00<small>prânz</small></div>
+          <div class="block-body">
+            <div class="task-list">
+              <button class="task" type="button" data-id="omega" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Omega-3 Aronia Charlottenburg<small>450 mg EPA + 230 mg DHA.</small></span>
+                <span class="dose">1 capsulă · 680 mg EPA+DHA</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="time-block">
+          <div class="time-cell">17:00<small>între mese</small></div>
+          <div class="block-body">
+            <div class="task-list">
+              <button class="task" type="button" data-id="psyllium-pm" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Psyllium<small>A doua doză după perioada de adaptare.</small></span>
+                <span class="dose">5 g + 350–500 ml apă</span>
+              </button>
+            </div>
+            <p class="instruction">Începe cu o singură doză pe zi dacă vrei să verifici toleranța.</p>
+          </div>
+        </section>
+
+        <section class="time-block gym-block">
+          <div class="time-cell">SALĂ<small>−60 min</small></div>
+          <div class="block-body">
+            <div class="block-label">
+              <h3>Cu 30–60 minute înainte</h3>
+              <span class="tag tag-gym">zi cu sală</span>
+            </div>
+            <div class="task-list">
+              <button class="task" type="button" data-id="collagen-gym" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Colagen hidrolizat<small>În ziua de sală, doza de dimineață se mută aici.</small></span>
+                <span class="dose">10 g</span>
+              </button>
+
+              <button class="task" type="button" data-id="caffeine" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Cafea / energizant zero <span class="tag tag-optional">opțional</span><small>Nu este reminder zilnic. Cofeină totală: maximum 400 mg/zi.</small></span>
+                <span class="dose">la nevoie</span>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="time-block">
+          <div class="time-cell">21:00<small>cină</small></div>
+          <div class="block-body">
+            <div class="task-list">
+              <button class="task" type="button" data-id="mag-pm" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Magneziu bisglicinat</span>
+                <span class="dose">1 capsulă</span>
+              </button>
+
+              <button class="task" type="button" data-id="whey" aria-pressed="false">
+                <span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <span class="task-main">Whey <span class="tag tag-optional">la nevoie</span><small>Doar pentru completarea țintei zilnice de proteină.</small></span>
+                <span class="dose">după necesar</span>
+              </button>
+            </div>
+          </div>
+        </section>
+        </div>
+      </section>
+
+      <aside class="side-rail">
+        <section class="water-board" aria-labelledby="waterTitle">
+          <div class="board-heading">
+            <h2 id="waterTitle">Apă</h2>
+            <div class="target">
+              <strong id="waterCount">0 / 8</strong>
+              <span>pahare</span>
+            </div>
+          </div>
+
+          <div class="water-meter" id="waterMeter" aria-hidden="true"></div>
+
+          <table class="water-table">
+            <thead>
+              <tr><th>Ora</th><th>Cantitate</th></tr>
+            </thead>
+            <tbody id="waterRoot">
+              <tr><td colspan="2"><button class="water-task" type="button" data-id="water-1000" aria-pressed="false"><span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="water-time">10:00</span><span class="water-amount">1 pahar</span></button></td></tr>
+              <tr><td colspan="2"><button class="water-task" type="button" data-id="water-1200" aria-pressed="false"><span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="water-time">12:00</span><span class="water-amount">1 pahar</span></button></td></tr>
+              <tr><td colspan="2"><button class="water-task" type="button" data-id="water-1400" aria-pressed="false"><span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="water-time">14:00</span><span class="water-amount">1 pahar</span></button></td></tr>
+              <tr><td colspan="2"><button class="water-task" type="button" data-id="water-1630" aria-pressed="false"><span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="water-time">16:30</span><span class="water-amount">1 pahar</span></button></td></tr>
+              <tr><td colspan="2"><button class="water-task" type="button" data-id="water-1900" aria-pressed="false"><span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="water-time">19:00</span><span class="water-amount">1 pahar</span></button></td></tr>
+              <tr><td colspan="2"><button class="water-task" type="button" data-id="water-2130" aria-pressed="false"><span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="water-time">21:30</span><span class="water-amount">1 pahar</span></button></td></tr>
+              <tr><td colspan="2"><button class="water-task" type="button" data-id="water-2330" aria-pressed="false"><span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="water-time">23:30</span><span class="water-amount">1 pahar</span></button></td></tr>
+              <tr><td colspan="2"><button class="water-task" type="button" data-id="water-0030" aria-pressed="false"><span class="check" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="water-time">00:30</span><span class="water-amount">1 pahar</span></button></td></tr>
+            </tbody>
+          </table>
+
+          <div class="water-complete" id="waterMessage">Target: 8 pahare. Bifează fiecare pahar direct din tabel.</div>
+        </section>
+
+        <section class="notes-board" aria-labelledby="notesTitle">
+          <div class="board-heading"><h2 id="notesTitle">Note</h2></div>
+          <ul class="notes-list" id="notesRoot">
+            <li><span class="note-mark">D</span><span><strong>D3:</strong> 5.000 IU este temporar pentru deficit; apoi analize și ajustarea dozei.</span></li>
+            <li><span class="note-mark">C</span><span><strong>Creatină:</strong> 5 g zilnic, inclusiv în zilele fără antrenament.</span></li>
+            <li><span class="note-mark">Ω</span><span><strong>Omega-3:</strong> o capsulă oferă 680 mg EPA + DHA.</span></li>
+            <li><span class="note-mark">P</span><span><strong>Psyllium:</strong> separat de restul și întotdeauna cu multă apă.</span></li>
+            <li><span class="note-mark">M</span><span><strong>Multivitamina:</strong> până termini cutia actuală.</span></li>
+            <li><span class="note-mark">K</span><span><strong>Colagen:</strong> 10 g zilnic; înainte de sală în zilele cu antrenament.</span></li>
+            <li><span class="note-mark">W</span><span><strong>Whey:</strong> doar când alimentația nu acoperă ținta de proteină.</span></li>
+          </ul>
+        </section>
+      </aside>
+    </div>
+
+    <footer class="footer-line">
+      <span>Datele rămân doar în browserul tău.</span>
+      <span>Click din nou pe un element pentru a-l reactiva.</span>
+    </footer>
+  </main>
+
+
+  <main class="editor-shell" id="editorView" hidden>
+    <header class="editor-topbar">
+      <div>
+        <h1>Editează planul</h1>
+        <p class="editor-subtitle">Modificările sunt aplicate doar după salvare.</p>
+      </div>
+      <div class="editor-actions">
+        <button class="reset-button" type="button" id="cancelEdit">Renunță</button>
+        <button class="reset-button primary-button" type="button" id="savePlan">Salvează</button>
+      </div>
+    </header>
+
+    <div class="editor-error" id="editorError" role="alert" hidden></div>
+
+    <section class="editor-board" aria-label="Editor plan">
+      <div class="editor-tabs" role="tablist" aria-label="Secțiuni editor">
+        <button class="editor-tab" type="button" role="tab" id="tabSchedule" aria-selected="true" aria-controls="scheduleEditor" data-tab="schedule">Program</button>
+        <button class="editor-tab" type="button" role="tab" id="tabWater" aria-selected="false" aria-controls="waterEditor" data-tab="water">Apă</button>
+        <button class="editor-tab" type="button" role="tab" id="tabNotes" aria-selected="false" aria-controls="notesEditor" data-tab="notes">Note</button>
+      </div>
+
+      <section class="editor-panel" id="scheduleEditor" role="tabpanel" aria-labelledby="tabSchedule">
+        <div class="editor-panel-head">
+          <div><h2>Program</h2><p>Intervalele și elementele apar în plan în ordinea de aici.</p></div>
+          <button class="add-button" type="button" id="addBlock">+ Adaugă interval</button>
+        </div>
+        <div class="editor-stack" id="scheduleEditorRoot"></div>
+      </section>
+
+      <section class="editor-panel" id="waterEditor" role="tabpanel" aria-labelledby="tabWater" hidden>
+        <div class="editor-panel-head">
+          <div><h2>Apă</h2><p>Targetul și orele pot fi modificate separat.</p></div>
+          <button class="add-button" type="button" id="addWater">+ Adaugă pahar</button>
+        </div>
+        <div class="target-editor">
+          <label class="field"><span>Target zilnic</span><input class="editor-input" id="waterTargetInput" type="number" min="1" max="24" inputmode="numeric"></label>
+          <p>Folosit pentru progresul afișat pe ecranul principal.</p>
+        </div>
+        <div class="simple-editor-list" id="waterEditorRoot"></div>
+      </section>
+
+      <section class="editor-panel" id="notesEditor" role="tabpanel" aria-labelledby="tabNotes" hidden>
+        <div class="editor-panel-head">
+          <div><h2>Note</h2><p>Informații de referință; nu apar în progresul zilnic.</p></div>
+          <button class="add-button" type="button" id="addNote">+ Adaugă notă</button>
+        </div>
+        <div class="simple-editor-list" id="notesEditorRoot"></div>
+      </section>
+    </section>
+
+    <div class="editor-footer">
+      <span class="editor-footer-note">Ștergerile din editor nu afectează planul până la salvare.</span>
+      <div class="editor-actions">
+        <button class="reset-button danger-button" type="button" id="restoreDefaults">Planul inițial</button>
+        <button class="reset-button primary-button" type="button" id="savePlanBottom">Salvează modificările</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const CHECK = '<svg viewBox="0 0 20 20" fill="none"><path d="m4 10 4 4 8-9" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      const PLAN_KEY = 'supplement-plan:v2';
+      const STATE_PREFIX = 'daily-supplement-ledger:';
+      const TIME_ZONE = 'Europe/Bucharest';
+
+      const trackerView = document.getElementById('trackerView');
+      const editorView = document.getElementById('editorView');
+      const scheduleRoot = document.getElementById('scheduleRoot');
+      const waterRoot = document.getElementById('waterRoot');
+      const notesRoot = document.getElementById('notesRoot');
+      const waterMeter = document.getElementById('waterMeter');
+      const waterCount = document.getElementById('waterCount');
+      const waterMessage = document.getElementById('waterMessage');
+      const overallProgress = document.getElementById('overallProgress');
+      const todayLabel = document.getElementById('todayLabel');
+      const editorError = document.getElementById('editorError');
+      const scheduleEditorRoot = document.getElementById('scheduleEditorRoot');
+      const waterEditorRoot = document.getElementById('waterEditorRoot');
+      const notesEditorRoot = document.getElementById('notesEditorRoot');
+      const waterTargetInput = document.getElementById('waterTargetInput');
+
+      const defaultPlan = extractInitialPlan();
+      let plan = loadPlan() || clone(defaultPlan);
+      let draft = null;
+      let dirty = false;
+      let activeTab = 'schedule';
+
+      todayLabel.textContent = new Intl.DateTimeFormat('ro-RO', {
+        timeZone: TIME_ZONE, weekday: 'long', day: 'numeric', month: 'long'
+      }).format(new Date());
+
+      document.getElementById('editPlan').addEventListener('click', openEditor);
+      document.getElementById('resetDay').addEventListener('click', resetDay);
+      document.getElementById('cancelEdit').addEventListener('click', closeEditor);
+      document.getElementById('savePlan').addEventListener('click', saveDraft);
+      document.getElementById('savePlanBottom').addEventListener('click', saveDraft);
+      document.getElementById('restoreDefaults').addEventListener('click', restoreDefaults);
+      document.getElementById('addBlock').addEventListener('click', addBlock);
+      document.getElementById('addWater').addEventListener('click', addWater);
+      document.getElementById('addNote').addEventListener('click', addNote);
+      waterTargetInput.addEventListener('input', () => {
+        if (!draft) return;
+        draft.waterTarget = Number(waterTargetInput.value);
+        dirty = true;
+      });
+
+      document.querySelectorAll('.editor-tab').forEach((tab) => {
+        tab.addEventListener('click', () => setTab(tab.dataset.tab));
+      });
+
+      renderTracker();
+
+      function extractInitialPlan() {
+        const schedule = [...scheduleRoot.querySelectorAll('.time-block')].map((block) => {
+          const timeCell = block.querySelector('.time-cell');
+          const timeClone = timeCell.cloneNode(true);
+          timeClone.querySelector('small')?.remove();
+          const items = [...block.querySelectorAll('.task')].map((button) => {
+            const main = button.querySelector('.task-main');
+            const copy = main.cloneNode(true);
+            copy.querySelectorAll('small,.tag').forEach((node) => node.remove());
+            const tagNode = main.querySelector('.tag');
+            let tag = '';
+            if (tagNode?.classList.contains('tag-temporary')) tag = 'temporary';
+            if (tagNode?.classList.contains('tag-optional')) tag = 'optional';
+            return {
+              id: button.dataset.id || uid('item'),
+              name: copy.textContent.trim(),
+              dose: button.querySelector('.dose')?.textContent.trim() || '',
+              info: main.querySelector('small')?.textContent.trim() || '',
+              tag
+            };
+          });
+          return {
+            id: block.dataset.blockId || uid('block'),
+            time: timeClone.textContent.trim(),
+            timeNote: timeCell.querySelector('small')?.textContent.trim() || '',
+            title: block.querySelector('.block-label h3')?.textContent.trim() || '',
+            kind: block.classList.contains('gym-block') ? 'gym' : 'normal',
+            instruction: block.querySelector('.instruction')?.textContent.trim() || '',
+            items
+          };
+        });
+
+        const water = [...waterRoot.querySelectorAll('.water-task')].map((button) => ({
+          id: button.dataset.id || uid('water'),
+          time: button.querySelector('.water-time')?.textContent.trim() || '',
+          amount: button.querySelector('.water-amount')?.textContent.trim() || ''
+        }));
+
+        const notes = [...notesRoot.querySelectorAll('li')].map((item) => {
+          const copy = item.querySelector('span:last-child');
+          const title = copy.querySelector('strong')?.textContent.replace(/:\s*$/, '').trim() || '';
+          const body = copy.textContent.replace(/^\s*[^:]+:\s*/, '').trim();
+          return {
+            id: uid('note'),
+            mark: item.querySelector('.note-mark')?.textContent.trim() || '•',
+            title,
+            body
+          };
+        });
+
+        return { version: 2, waterTarget: 8, schedule, water, notes };
+      }
+
+      function renderTracker() {
+        renderSchedule();
+        renderWater();
+        renderNotes();
+        updateProgress();
+      }
+
+      function renderSchedule() {
+        scheduleRoot.replaceChildren();
+        if (!plan.schedule.length) {
+          scheduleRoot.append(make('div', 'editor-empty', 'Nu există intervale. Folosește „Editează planul” pentru a adăuga unul.'));
+          return;
+        }
+
+        plan.schedule.forEach((block) => {
+          const section = make('section', `time-block${block.kind === 'gym' ? ' gym-block' : ''}`);
+          const timeCell = make('div', 'time-cell', block.time || '—');
+          if (block.timeNote) timeCell.append(make('small', '', block.timeNote));
+          const body = make('div', 'block-body');
+
+          if (block.title || block.kind === 'gym') {
+            const label = make('div', 'block-label');
+            label.append(block.title ? make('h3', '', block.title) : make('span'));
+            if (block.kind === 'gym') label.append(tag('gym'));
+            body.append(label);
+          }
+
+          const list = make('div', 'task-list');
+          block.items.forEach((item) => list.append(taskButton(item)));
+          body.append(list);
+          if (block.instruction) body.append(make('p', 'instruction', block.instruction));
+          section.append(timeCell, body);
+          scheduleRoot.append(section);
+        });
+      }
+
+      function taskButton(item) {
+        const button = make('button', `task${item.tag ? ` task-${item.tag}` : ''}`);
+        button.type = 'button';
+        button.dataset.id = item.id;
+        button.setAttribute('aria-pressed', 'false');
+        const check = make('span', 'check');
+        check.setAttribute('aria-hidden', 'true');
+        check.innerHTML = CHECK;
+        const main = make('span', 'task-main', item.name);
+        if (item.info) main.append(make('small', '', item.info));
+        button.append(check, main, make('span', 'dose', item.dose || ''));
+        applyDone(button, Boolean(dayState()[item.id]));
+        button.addEventListener('click', () => toggleDone(button));
+        return button;
+      }
+
+      function renderWater() {
+        waterRoot.replaceChildren();
+        const target = normalizedTarget(plan.waterTarget);
+        waterMeter.style.gridTemplateColumns = `repeat(${target}, minmax(8px, 1fr))`;
+        waterMeter.replaceChildren(...Array.from({ length: target }, () => make('span', 'water-segment')));
+        if (!plan.water.length) {
+          const tr = document.createElement('tr');
+          const td = document.createElement('td');
+          td.colSpan = 2;
+          td.append(make('div', 'editor-empty', 'Nu există ore pentru apă.'));
+          tr.append(td);
+          waterRoot.append(tr);
+          return;
+        }
+        const state = dayState();
+        plan.water.forEach((entry) => {
+          const tr = document.createElement('tr');
+          const td = document.createElement('td');
+          td.colSpan = 2;
+          const button = make('button', 'water-task');
+          button.type = 'button';
+          button.dataset.id = entry.id;
+          button.setAttribute('aria-pressed', 'false');
+          const check = make('span', 'check');
+          check.setAttribute('aria-hidden', 'true');
+          check.innerHTML = CHECK;
+          button.append(check, make('span', 'water-time', entry.time), make('span', 'water-amount', entry.amount));
+          applyDone(button, Boolean(state[entry.id]));
+          button.addEventListener('click', () => toggleDone(button));
+          td.append(button); tr.append(td); waterRoot.append(tr);
+        });
+      }
+
+      function renderNotes() {
+        notesRoot.replaceChildren();
+        if (!plan.notes.length) {
+          const li = document.createElement('li');
+          li.append(make('span', 'note-mark', '—'), make('span', '', 'Nu există note.'));
+          notesRoot.append(li);
+          return;
+        }
+        plan.notes.forEach((note) => {
+          const li = document.createElement('li');
+          const copy = make('span');
+          if (note.title) copy.append(make('strong', '', `${note.title}:`), document.createTextNode(` ${note.body}`));
+          else copy.textContent = note.body;
+          li.append(make('span', 'note-mark', note.mark || '•'), copy);
+          notesRoot.append(li);
+        });
+      }
+
+      function tag(type) {
+        const labels = { temporary: 'temporar', optional: 'la nevoie', gym: 'zi cu sală' };
+        return make('span', `tag tag-${type}`, labels[type] || type);
+      }
+
+      function toggleDone(button) {
+        const next = !button.classList.contains('is-done');
+        applyDone(button, next);
+        if (next && button.classList.contains('task')) {
+          button.classList.remove('just-done');
+          void button.offsetWidth;
+          button.classList.add('just-done');
+          setTimeout(() => button.classList.remove('just-done'), 360);
+        }
+        const state = dayState();
+        if (next) state[button.dataset.id] = true;
+        else delete state[button.dataset.id];
+        saveDayState(state);
+        updateProgress();
+      }
+
+      function applyDone(button, done) {
+        button.classList.toggle('is-done', done);
+        button.setAttribute('aria-pressed', String(done));
+      }
+
+      function updateProgress() {
+        const all = [...trackerView.querySelectorAll('[data-id]')];
+        const waterButtons = [...trackerView.querySelectorAll('.water-task[data-id]')];
+        const completed = all.filter((button) => button.classList.contains('is-done')).length;
+        const waterCompleted = waterButtons.filter((button) => button.classList.contains('is-done')).length;
+        overallProgress.textContent = `${completed} / ${all.length} ${completed === 1 ? 'bifat' : 'bifate'}`;
+        const target = normalizedTarget(plan.waterTarget);
+        waterCount.textContent = `${waterCompleted} / ${target}`;
+        [...waterMeter.children].forEach((segment, index) => segment.classList.toggle('filled', index < waterCompleted));
+        const left = Math.max(0, target - waterCompleted);
+        waterMessage.textContent = left === 0
+          ? `Target atins: ${target} ${target === 1 ? 'pahar' : 'pahare'}.`
+          : `Target: ${target} ${target === 1 ? 'pahar' : 'pahare'}. ${left === 1 ? 'Mai rămâne 1 pahar.' : `Mai rămân ${left} pahare.`}`;
+      }
+
+      function resetDay() {
+        [...trackerView.querySelectorAll('[data-id]')].forEach((button) => applyDone(button, false));
+        saveDayState({});
+        updateProgress();
+      }
+
+      function openEditor() {
+        draft = clone(plan);
+        dirty = false;
+        editorError.hidden = true;
+        trackerView.hidden = true;
+        editorView.hidden = false;
+        renderEditors();
+        setTab(activeTab);
+        scrollTo(0, 0);
+        document.getElementById('cancelEdit').focus();
+      }
+
+      function closeEditor() {
+        if (dirty && !confirm('Renunți la modificările nesalvate?')) return;
+        draft = null;
+        dirty = false;
+        editorView.hidden = true;
+        trackerView.hidden = false;
+        editorError.hidden = true;
+        scrollTo(0, 0);
+        document.getElementById('editPlan').focus();
+      }
+
+      function setTab(name) {
+        activeTab = name;
+        document.querySelectorAll('.editor-tab').forEach((tabButton) => tabButton.setAttribute('aria-selected', String(tabButton.dataset.tab === name)));
+        document.getElementById('scheduleEditor').hidden = name !== 'schedule';
+        document.getElementById('waterEditor').hidden = name !== 'water';
+        document.getElementById('notesEditor').hidden = name !== 'notes';
+      }
+
+      function renderEditors() {
+        waterTargetInput.value = normalizedTarget(draft.waterTarget);
+        renderScheduleEditor();
+        renderWaterEditor();
+        renderNotesEditor();
+      }
+
+      function renderScheduleEditor() {
+        const openIds = new Set([...scheduleEditorRoot.querySelectorAll('.plan-edit-block[open]')].map((node) => node.dataset.blockId));
+        scheduleEditorRoot.replaceChildren();
+        if (!draft.schedule.length) scheduleEditorRoot.append(make('div', 'editor-empty', 'Nu există intervale.'));
+        draft.schedule.forEach((block, blockIndex) => {
+          const wrapper = make('details', `plan-edit-block${block.kind === 'gym' ? ' is-gym' : ''}`);
+          wrapper.dataset.blockId = block.id;
+          wrapper.open = openIds.size ? openIds.has(block.id) : blockIndex === 0;
+          const summary = make('summary', 'plan-edit-summary');
+          summary.append(
+            make('span', 'plan-edit-time', block.time || 'Fără oră'),
+            make('strong', '', block.title || block.items[0]?.name || 'Interval nou'),
+            make('span', 'plan-edit-count', `${block.items.length} ${block.items.length === 1 ? 'element' : 'elemente'}`)
+          );
+          wrapper.append(summary);
+          const head = make('div', 'plan-edit-head');
+          head.append(
+            field('Ora / reper', block.time, 16, (value) => { block.time = value; dirty = true; }, true),
+            field('Etichetă oră', block.timeNote, 30, (value) => { block.timeNote = value; dirty = true; }),
+            field('Titlu interval', block.title, 80, (value) => { block.title = value; dirty = true; }),
+            selectField('Tip', block.kind, [['normal','Normal'],['gym','Sală']], (value) => { block.kind = value; dirty = true; renderScheduleEditor(); })
+          );
+          const controls = make('div', 'row-actions');
+          controls.append(
+            action('↑', 'Mută intervalul în sus', () => move(draft.schedule, blockIndex, -1, renderScheduleEditor), blockIndex === 0),
+            action('↓', 'Mută intervalul în jos', () => move(draft.schedule, blockIndex, 1, renderScheduleEditor), blockIndex === draft.schedule.length - 1),
+            action('×', 'Șterge intervalul', () => { draft.schedule.splice(blockIndex, 1); dirty = true; renderScheduleEditor(); }, false, true)
+          );
+          head.append(controls); wrapper.append(head);
+
+          const items = make('div', 'plan-edit-items');
+          block.items.forEach((item, itemIndex) => {
+            const row = make('div', 'plan-edit-item');
+            row.append(
+              field('Supliment / element', item.name, 100, (value) => { item.name = value; dirty = true; }, true),
+              field('Doză', item.dose, 80, (value) => { item.dose = value; dirty = true; }),
+              field('Informație', item.info, 180, (value) => { item.info = value; dirty = true; }),
+              selectField('Etichetă', item.tag, [['','Fără'],['temporary','Temporar'],['optional','La nevoie']], (value) => { item.tag = value; dirty = true; })
+            );
+            const rowControls = make('div', 'row-actions');
+            rowControls.append(
+              action('↑', 'Mută elementul în sus', () => move(block.items, itemIndex, -1, renderScheduleEditor), itemIndex === 0),
+              action('↓', 'Mută elementul în jos', () => move(block.items, itemIndex, 1, renderScheduleEditor), itemIndex === block.items.length - 1),
+              action('×', 'Șterge elementul', () => { block.items.splice(itemIndex, 1); dirty = true; renderScheduleEditor(); }, false, true)
+            );
+            row.append(rowControls); items.append(row);
+          });
+
+          const instruction = field('Instrucțiune pentru interval', block.instruction || '', 180, (value) => { block.instruction = value; dirty = true; });
+          instruction.style.marginTop = '12px';
+          items.append(instruction);
+          const addItem = make('button', 'add-button', '+ Adaugă element');
+          addItem.type = 'button';
+          addItem.style.marginTop = '12px';
+          addItem.addEventListener('click', () => {
+            block.items.push({ id: uid('item'), name: '', dose: '', info: '', tag: '' });
+            dirty = true; renderScheduleEditor(); focusLast(scheduleEditorRoot);
+          });
+          items.append(addItem); wrapper.append(items); scheduleEditorRoot.append(wrapper);
+        });
+      }
+
+      function renderWaterEditor() {
+        waterEditorRoot.replaceChildren();
+        if (!draft.water.length) waterEditorRoot.append(make('div', 'editor-empty', 'Nu există remindere pentru apă.'));
+        draft.water.forEach((entry, index) => {
+          const row = make('div', 'simple-edit-row');
+          row.append(
+            field('Ora', entry.time, 5, (value) => { entry.time = value; dirty = true; }, true, 'time'),
+            field('Cantitate', entry.amount, 50, (value) => { entry.amount = value; dirty = true; }, true)
+          );
+          const controls = make('div', 'row-actions');
+          controls.append(
+            action('↑', 'Mută în sus', () => move(draft.water, index, -1, renderWaterEditor), index === 0),
+            action('↓', 'Mută în jos', () => move(draft.water, index, 1, renderWaterEditor), index === draft.water.length - 1),
+            action('×', 'Șterge paharul', () => { draft.water.splice(index, 1); dirty = true; renderWaterEditor(); }, false, true)
+          );
+          row.append(controls); waterEditorRoot.append(row);
+        });
+      }
+
+      function renderNotesEditor() {
+        notesEditorRoot.replaceChildren();
+        if (!draft.notes.length) notesEditorRoot.append(make('div', 'editor-empty', 'Nu există note.'));
+        draft.notes.forEach((note, index) => {
+          const row = make('div', 'simple-edit-row note-edit-row');
+          row.append(
+            field('Marcaj', note.mark, 2, (value) => { note.mark = value; dirty = true; }),
+            field('Titlu', note.title, 60, (value) => { note.title = value; dirty = true; }),
+            textareaField('Text', note.body, 220, (value) => { note.body = value; dirty = true; }, true)
+          );
+          const controls = make('div', 'row-actions');
+          controls.append(
+            action('↑', 'Mută nota în sus', () => move(draft.notes, index, -1, renderNotesEditor), index === 0),
+            action('↓', 'Mută nota în jos', () => move(draft.notes, index, 1, renderNotesEditor), index === draft.notes.length - 1),
+            action('×', 'Șterge nota', () => { draft.notes.splice(index, 1); dirty = true; renderNotesEditor(); }, false, true)
+          );
+          row.append(controls); notesEditorRoot.append(row);
+        });
+      }
+
+      function addBlock() {
+        draft.schedule.push({ id: uid('block'), time: '', timeNote: '', title: '', kind: 'normal', instruction: '', items: [{ id: uid('item'), name: '', dose: '', info: '', tag: '' }] });
+        dirty = true; renderScheduleEditor(); focusLast(scheduleEditorRoot);
+      }
+      function addWater() {
+        draft.water.push({ id: uid('water'), time: '10:00', amount: '1 pahar' });
+        dirty = true; renderWaterEditor();
+      }
+      function addNote() {
+        draft.notes.push({ id: uid('note'), mark: '•', title: '', body: '' });
+        dirty = true; renderNotesEditor(); focusLast(notesEditorRoot);
+      }
+
+      function saveDraft() {
+        clearInvalid();
+        const invalid = validate();
+        if (invalid) {
+          editorError.textContent = invalid.message;
+          editorError.hidden = false;
+          setTab(invalid.tab);
+          requestAnimationFrame(() => { invalid.field.setAttribute('aria-invalid', 'true'); invalid.field.focus(); });
+          return;
+        }
+        draft.waterTarget = normalizedTarget(draft.waterTarget);
+        plan = clone(draft);
+        savePlan(plan);
+        dirty = false;
+        renderTracker();
+        closeEditor();
+      }
+
+      function validate() {
+        for (const block of draft.schedule) {
+          if (!block.time.trim()) return invalid('Completează ora sau reperul intervalului.', 'schedule', findField(scheduleEditorRoot, block.time));
+          for (const item of block.items) {
+            if (!item.name.trim()) return invalid('Fiecare element din program trebuie să aibă un nume.', 'schedule', findField(scheduleEditorRoot, item.name, true));
+          }
+        }
+        if (!Number.isFinite(Number(draft.waterTarget)) || Number(draft.waterTarget) < 1 || Number(draft.waterTarget) > 24) return invalid('Targetul de apă trebuie să fie între 1 și 24.', 'water', waterTargetInput);
+        for (const entry of draft.water) {
+          if (!entry.time.trim()) return invalid('Completează ora fiecărui pahar.', 'water', findField(waterEditorRoot, entry.time));
+          if (!entry.amount.trim()) return invalid('Completează cantitatea fiecărui pahar.', 'water', findField(waterEditorRoot, entry.amount));
+        }
+        for (const note of draft.notes) {
+          if (!note.body.trim()) return invalid('Fiecare notă trebuie să conțină text.', 'notes', findField(notesEditorRoot, note.body, true));
+        }
+        return null;
+      }
+
+      function invalid(message, tabName, input) { return { message, tab: tabName, field: input || document.querySelector(`[data-tab="${tabName}"]`) }; }
+      function clearInvalid() { editorError.hidden = true; editorView.querySelectorAll('[aria-invalid="true"]').forEach((input) => input.removeAttribute('aria-invalid')); }
+
+      function restoreDefaults() {
+        if (!confirm('Înlocuiești draftul cu planul inițial? Modificarea se aplică doar după salvare.')) return;
+        draft = clone(defaultPlan); dirty = true; renderEditors(); setTab('schedule');
+      }
+
+      function field(labelText, value, maxLength, onInput, required = false, type = 'text') {
+        const label = make('label', 'field');
+        label.append(make('span', '', labelText));
+        const input = make('input', 'editor-input');
+        input.type = type;
+        if (type !== 'time') input.maxLength = maxLength;
+        input.value = value || '';
+        input.required = required;
+        input.addEventListener('input', () => onInput(input.value));
+        label.append(input); return label;
+      }
+      function textareaField(labelText, value, maxLength, onInput, required = false) {
+        const label = make('label', 'field'); label.append(make('span', '', labelText));
+        const input = make('textarea', 'editor-textarea'); input.maxLength = maxLength; input.value = value || ''; input.required = required;
+        input.addEventListener('input', () => onInput(input.value)); label.append(input); return label;
+      }
+      function selectField(labelText, value, options, onChange) {
+        const label = make('label', 'field'); label.append(make('span', '', labelText));
+        const select = make('select', 'editor-select');
+        options.forEach(([optionValue, optionLabel]) => {
+          const option = document.createElement('option'); option.value = optionValue; option.textContent = optionLabel; option.selected = optionValue === value; select.append(option);
+        });
+        select.addEventListener('change', () => onChange(select.value)); label.append(select); return label;
+      }
+      function action(text, label, handler, disabled = false, remove = false) {
+        const button = make('button', `mini-button${remove ? ' remove' : ''}`, text);
+        button.type = 'button'; button.disabled = disabled; button.title = label; button.setAttribute('aria-label', label); button.addEventListener('click', handler); return button;
+      }
+      function move(array, index, direction, rerender) {
+        const next = index + direction; if (next < 0 || next >= array.length) return;
+        [array[index], array[next]] = [array[next], array[index]]; dirty = true; rerender();
+      }
+      function focusLast(root) { requestAnimationFrame(() => [...root.querySelectorAll('[required]')].at(-1)?.focus()); }
+      function findField(root, value, last = false) { const matches = [...root.querySelectorAll('input,textarea,select')].filter((input) => input.value === value); return last ? matches.at(-1) : matches[0]; }
+
+      function normalizedTarget(value) { const number = Number(value); return Number.isFinite(number) ? Math.min(24, Math.max(1, Math.round(number))) : 8; }
+      function uid(prefix) { return `${prefix}-${globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`}`; }
+      function clone(value) { return JSON.parse(JSON.stringify(value)); }
+      function make(tagName, className = '', text = '') { const node = document.createElement(tagName); if (className) node.className = className; if (text !== '') node.textContent = text; return node; }
+
+      function loadPlan() {
+        try {
+          const candidate = JSON.parse(localStorage.getItem(PLAN_KEY) || 'null');
+          return sanitize(candidate);
+        } catch { return null; }
+      }
+      function savePlan(next) { try { localStorage.setItem(PLAN_KEY, JSON.stringify(next)); } catch {} }
+      function sanitize(candidate) {
+        if (!candidate || !Array.isArray(candidate.schedule) || !Array.isArray(candidate.water) || !Array.isArray(candidate.notes)) return null;
+        const clean = clone(candidate); clean.version = 2; clean.waterTarget = normalizedTarget(clean.waterTarget);
+        clean.schedule = clean.schedule.map((block) => ({
+          id: text(block.id, uid('block')), time: text(block.time), timeNote: text(block.timeNote), title: text(block.title), kind: block.kind === 'gym' ? 'gym' : 'normal', instruction: text(block.instruction),
+          items: Array.isArray(block.items) ? block.items.map((item) => ({ id: text(item.id, uid('item')), name: text(item.name), dose: text(item.dose), info: text(item.info), tag: ['temporary','optional'].includes(item.tag) ? item.tag : '' })) : []
+        }));
+        clean.water = clean.water.map((entry) => ({ id: text(entry.id, uid('water')), time: text(entry.time), amount: text(entry.amount) }));
+        clean.notes = clean.notes.map((note) => ({ id: text(note.id, uid('note')), mark: text(note.mark, '•').slice(0,2), title: text(note.title), body: text(note.body) }));
+        return clean;
+      }
+      function text(value, fallback = '') { return typeof value === 'string' ? value : fallback; }
+      function dateKey() { return new Intl.DateTimeFormat('sv-SE', { timeZone: TIME_ZONE, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
+      function dayState() { try { return JSON.parse(localStorage.getItem(`${STATE_PREFIX}${dateKey()}`) || '{}'); } catch { return {}; } }
+      function saveDayState(state) { try { localStorage.setItem(`${STATE_PREFIX}${dateKey()}`, JSON.stringify(state)); } catch {} }
+    })();
+
+  </script>
+</body>
+</html>
